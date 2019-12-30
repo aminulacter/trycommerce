@@ -62,16 +62,16 @@
                         </form>
                         </div>
                         <div>
-                            <select class="quantity">
-                                <option selected="">{{$item->qty }}</option>
+                        <select class="quantity" data-id="{{ $item->rowId }}">
+                            
                                
-                                @for ($i = 0; $i < ($item->qty-1); $i++)
-                                    <option>{{$i+1}}</option>
+                                @for ($i = 1; $i < 6; $i++)
+                                    <option {{ $item->qty == $i ? 'selected' : ''}}>{{$i}}</option>
                                 @endfor
                                
                             </select>
                         </div>
-                    <div> {{  $item->model->presentPrice() }}</div>
+                    <div> {{ presentPrice(Cart::Subtotal()) }}</div>
                     </div>
                 </div> <!-- end cart-table-row -->
                     
@@ -104,8 +104,8 @@
             </div> <!-- end cart-totals -->
 
             <div class="cart-buttons">
-                <a href="#" class="button">Continue Shopping</a>
-                <a href="#" class="button-primary">Proceed to Checkout</a>
+                <a href="{{ route('shop.index') }}" class="button">Continue Shopping</a>
+                <a href="{{ route('checkout.index') }}" class="button-primary">Proceed to Checkout</a>
             </div>
             @else
                 <h3>No items in Cart</h3>
@@ -166,4 +166,25 @@
     @include('partials.might-like')
 
 
+@endsection
+@section('extra-js')
+<script src="{{ asset('js/app.js') }}"></script>
+    <script>
+        (function () {
+           const classname = document.querySelectorAll('.quantity')
+            console.log(classname)
+           Array.from(classname).forEach(function (element) {
+               
+               element.addEventListener('change', function () {
+                     const id = element.getAttribute('data-id');
+                     console.log("fucking" + id);
+                     axios.patch(`/cart/${id}`,{
+                         quantity: this.value
+                     } )
+                     .then(response => window.location.href = "{{ route('cart.index') }}")
+                     .catch(error =>console.log(error))           
+               })
+           })
+        })();
+    </script>
 @endsection
