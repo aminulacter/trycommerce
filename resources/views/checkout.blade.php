@@ -130,7 +130,12 @@
                 <div class="checkout-totals">
                     <div class="checkout-totals-left">
                         Subtotal <br>
-                        {{-- Discount (10OFF - 10%) <br> --}}
+                        Discount ({{session()->get('coupon')['name']}}) :
+                    <form method="post" action="{{ route('')}}">
+                       {{ csrf_field() }}  
+                       {{ method_field('delete') }}
+                       <button type="submit">Remove</button>  
+                    </form> <br>
                         Tax <br>
                         <span class="checkout-totals-total">Total</span>
 
@@ -138,13 +143,21 @@
 
                     <div class="checkout-totals-right">
                         {{ presentPrice(Cart::subtotal()) }} <br>
-                        {{-- -$750.00 <br> --}}
+                        {{presentPrice(session()->get('coupon')['discount'])}}
                         {{ presentPrice(Cart::tax()) }} <br>
                         <span class="checkout-totals-total">{{ presentPrice(Cart::total()) }}</span>
 
                     </div>
                 </div> <!-- end checkout-totals -->
 
+                <a href="#" class="have-code">Have a Code?</a>
+                <div class="have-code-container">
+                <form method="post" action="{{ route('coupon.store') }}">
+                      {{ csrf_field() }}
+                   <input  type="text" name="coupon_code" id="coupon_code">
+                    <button type="submit" class="button button-plain">Apply</button>
+                </form>
+                </div>
             </div>
 
         </div> <!-- end checkout-section -->

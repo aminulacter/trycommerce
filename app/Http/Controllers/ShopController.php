@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Product;
+use App\Category;
 
 class ShopController extends Controller
 {
@@ -14,9 +15,41 @@ class ShopController extends Controller
      */
     public function index()
     {
-        $products = Product::inRAndomOrder()->take(12)->get();
+        $pagination = 9;
+        $categories = Category::all();
+
+        if (request()->category) {
+            $products = Category::where('slug', request()->category)->first()->products();
+            $categoryName = optional(Category::where('slug', request()->category)->first())->name;
+
+            if (request()->sort == 'low_high') {
+                $products = $products->orderBy('price')->paginate($pagination);
+            } elseif (request()->sort == 'high_low') {
+                //dd(Category::where('slug', request()->category)->first()->products()->orderBy('price', 'desc'));
+                $products = $products->orderBy('price', 'desc')->paginate($pagination);
+            } else {
+                $products = $products->paginate($pagination);
+            }
+
+            // $products = Product::with('categories')->whereHas('categories', function ($query) {
+            //     $query->where('slug', request()->category);
+            // })->get();
+            // $products = Category::where('slug', request()->category)->first()->products()->paginate($pagination);
+        } else {
+            $categoryName ="Featured";
+            $products = Product::where('featured', true)->paginate($pagination);
+        }
+
+       
+
         
-        return view('shop')->with('products', $products);
+
+        
+        return view('shop')->with([
+            'products'=> $products,
+            'categories' => $categories,
+            'categoryName' => $categoryName
+        ]);
     }
 
     /**
