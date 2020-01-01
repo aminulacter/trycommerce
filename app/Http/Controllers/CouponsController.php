@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Coupon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
-class CuponsController extends Controller
+class CouponsController extends Controller
 {
 
     /**
@@ -47,7 +47,7 @@ class CuponsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy()
     {
         session()->forget('coupon');
         return redirect()->route('checkout.index')->with('success_message', 'Coupon has been removed.');
