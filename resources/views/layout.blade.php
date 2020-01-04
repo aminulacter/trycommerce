@@ -25,7 +25,8 @@
 
 
 <body class="@yield('body-class', '')">
-    @include('partials.nav')
+    {{-- @include('partials.nav') --}}
+     {{ menu('main', 'partials.nav') }}
 
     @yield('content')
 
