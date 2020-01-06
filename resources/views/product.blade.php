@@ -10,15 +10,13 @@
 
 @section('content')
 
-<div class="breadcrumbs">
-    <div class="container">
-        <a href="{{route('landing-page')}}">Home</a>
+ @component('components.breadcrumbs')
+        <a href="/">Home</a>
         <i class="fa fa-chevron-right breadcrumb-separator"></i>
-        <span><a href="{{route('shop.index')}}">Shop</a></span>
+        <span><a href="{{ route('shop.index') }}">Shop</a></span>
         <i class="fa fa-chevron-right breadcrumb-separator"></i>
         <span>{{ $product->name }}</span>
-    </div>
-</div> <!-- end breadcrumbs -->
+    @endcomponent <!-- end breadcrumbs -->
 
 <div class="product-section container">
     
