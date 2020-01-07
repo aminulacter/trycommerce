@@ -40,16 +40,33 @@ class ShopController extends Controller
             $products = Product::where('featured', true)->paginate($pagination);
         }
 
-       
-
-        
-
-        
         return view('shop')->with([
             'products'=> $products,
             'categories' => $categories,
             'categoryName' => $categoryName
         ]);
+    }
+
+
+
+    public function search()
+    {
+        $request->validate([
+        'query' => 'required|min:3'
+        ]);
+        $query = $request->input('query');
+        // $products = Product::where('name', 'like', '%$query%')
+        //                     ->orWhere('details', 'like', '%$query%')
+        //                     ->orWhere('description', 'like', '%$query%')
+        //                     ->paginate(10);
+
+        $products = Product::search($query)->paginate(10);
+        return view('search-results', compact('products'));
+    }
+
+    public function searchAlgolia(Request $request)
+    {
+        return view('search-results-algolia');
     }
 
     /**

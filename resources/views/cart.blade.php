@@ -3,13 +3,13 @@
 @section('title', 'Shopping Cart')
 
 @section('extra-css')
-
+    <link rel="stylesheet" href="{{ asset('css/algolia.css') }}">
 @endsection
 
 @section('content')
 
     @component('components.breadcrumbs')
-        <a href="#">Home</a>
+        <a href="/">Home</a>
         <i class="fa fa-chevron-right breadcrumb-separator"></i>
         <span>Shopping Cart</span>
     @endcomponent
@@ -167,6 +167,9 @@
 @endsection
 @section('extra-js')
 <script src="{{ asset('js/app.js') }}"></script>
+ <script src="https://cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/autocomplete.js/0/autocomplete.min.js"></script>
+<script src="{{ asset('js/algolia.js') }}"></script>
     <script>
         (function () {
            const classname = document.querySelectorAll('.quantity')
@@ -175,7 +178,7 @@
                
                element.addEventListener('change', function () {
                      const id = element.getAttribute('data-id');
-                     console.log("fucking" + id);
+                     console.log(id);
                      axios.patch(`/cart/${id}`,{
                          quantity: this.value
                      } )

@@ -39,7 +39,11 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/mailable', function(){
+Route::get('/search', 'ShopController@search')->name('search');
+Route::get('/search-algolia', 'ShopController@searchAlgolia')->name('search-algolia');
+
+
+Route::get('/mailable', function () {
     $order = App\Order::find(1);
     return new App\Mail\OrderPlaced($order);
 });
