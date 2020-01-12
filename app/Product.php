@@ -27,7 +27,7 @@ class Product extends Model
        
     ];
 
-
+    protected $fillable = ['quantity'];
 
     public function presentPrice()
     {

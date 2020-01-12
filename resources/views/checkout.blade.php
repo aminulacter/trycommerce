@@ -136,11 +136,7 @@
                         Subtotal <br>
                         @if (session()->has('coupon'))
                              Discount ({{session()->get('coupon')['name']}}) :
-                            <form method="post" action="{{ route('coupon.destroy')}}" style="display:inline">
-                            {{ csrf_field() }}  
-                            {{ method_field('delete') }}
-                            <button type="submit">Remove</button>  
-                            </form> 
+                            
                             <br>
                             <hr>
                              New Subtotal
@@ -165,16 +161,7 @@
 
                     </div>
                 </div> <!-- end checkout-totals -->
-                @if ( !session()->has('coupon'))
-                    <a href="#" class="have-code">Have a Code?</a>
-                    <div class="have-code-container">
-                        <form method="post" action="{{ route('coupon.store') }}">
-                            {{ csrf_field() }}
-                            <input  type="text" name="coupon_code" id="coupon_code">
-                            <button type="submit" class="button button-plain">Apply</button>
-                        </form>
-                    </div>
-                @endif
+                
             </div>
 
         </div> <!-- end checkout-section -->

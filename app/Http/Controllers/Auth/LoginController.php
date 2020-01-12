@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -47,7 +49,17 @@ class LoginController extends Controller
         session()->put('previousUrl', url()->previous());
         return view('auth.login');
     }
-
+    public function logout(Request $request)
+    {
+        $cart = collect(session()->get('cart'));
+        $destination = Auth::logout();
+        if (!config('cart.destroy_on_logout')) {
+            $cart->each(function ($rows, $identifier) {
+                session()->put('cart.' . $identifier, $rows);
+            });
+        }
+        return redirect()->to($destination);
+    }
     public function redirectTo()
     {
         return str_replace(url('/'), '', session()->get('previousUrl', '/'));
