@@ -1,14 +1,16 @@
 <?php
 namespace Tests\Feature;
+
 use App\Product;
 use App\Category;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 class ViewShopPageTest extends TestCase
 {
     use RefreshDatabase;
-   /** @test */
+    /** @test */
     public function shop_page_loads_correctly()
     {
         //Arrange
@@ -19,7 +21,7 @@ class ViewShopPageTest extends TestCase
         $response->assertSee('Featured');
     }
     /** @test */
-    public function featured_product_is_visible()
+    public function shop_featured_product_is_visible()
     {
         // Arrange
         $featuredProduct = factory(Product::class)->create([
@@ -31,7 +33,7 @@ class ViewShopPageTest extends TestCase
         $response = $this->get('/');
         // Assert
         $response->assertSee($featuredProduct->name);
-        $response->assertSee('$1499.99');
+        $response->assertSee('$1,499.99');
     }
     /** @test */
     public function not_featured_product_is_not_visible()
@@ -46,30 +48,32 @@ class ViewShopPageTest extends TestCase
         $response = $this->get('/');
         // Assert
         $response->assertDontSee($notFeaturedProduct->name);
-        $response->assertDontSee('$1499.99');
+        $response->assertDontSee('$1,499.99');
     }
     /** @test */
     public function pagination_for_products_works()
     {
         // Page 1 products
-        for ($i=11; $i < 20 ; $i++) {
+        for ($i=11; $i < 40 ; $i++) {
             factory(Product::class)->create([
                 'featured' => true,
                 'name' => 'Product '.$i,
             ]);
         }
-        // Page 2 products
-        for ($i=21; $i < 30 ; $i++) {
-            factory(Product::class)->create([
-                'featured' => true,
-                'name' => 'Product '.$i,
-            ]);
-        }
+        // // Page 2 products
+        // for ($i=21; $i < 30 ; $i++) {
+        //     factory(Product::class)->create([
+        //         'featured' => true,
+        //         'name' => 'Product '.$i,
+        //     ]);
+        // }
         $response = $this->get('/shop');
+        
         $response->assertSee('Product 11');
         $response->assertSee('Product 19');
         $response = $this->get('/shop?page=2');
         $response->assertSee('Product 21');
+        $response = $this->get('/shop?page=3');
         $response->assertSee('Product 29');
     }
     /** @test */

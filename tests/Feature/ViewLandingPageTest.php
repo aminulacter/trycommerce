@@ -1,9 +1,11 @@
 <?php
 namespace Tests\Feature;
+
 use App\Product;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 class ViewLandingPageTest extends TestCase
 {
     use RefreshDatabase;
@@ -28,11 +30,14 @@ class ViewLandingPageTest extends TestCase
             'name' => 'Laptop 1',
             'price' => 149999,
         ]);
-       //dd(Product::all());
+        //dd(Product::all());
         // Act
-        $response = $this->get('/');
+        $this->get('/')
+        ->assertSee($featuredProduct->name)
+        ->assertSee("$1,499.99");
+
         // Assert
-        $response->assertSee($featuredProduct->name);
+      //  $response->assertSee($featuredProduct->name);
        // $response->assertSee('$1499.99');
     }
     /** @test */

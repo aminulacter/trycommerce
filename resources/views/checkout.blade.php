@@ -143,7 +143,7 @@
                              <br>
                         @endif
                     
-                        Tax <br>
+                         Tax ({{config('cart.tax')}}%) <br>
                         <span class="checkout-totals-total">Total</span>
 
                     </div>

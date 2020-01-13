@@ -1,9 +1,11 @@
 <?php
 namespace Tests\Feature;
+
 use App\Product;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+
 class ViewProductTest extends TestCase
 {
     use RefreshDatabase;
@@ -21,7 +23,7 @@ class ViewProductTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Laptop 1');
         $response->assertSee('2 TB SSD');
-        $response->assertSee('2499.99');
+        $response->assertSee('$2,499.99');
         $response->assertSee('This is a description for Laptop 1');
     }
     /** @test */
@@ -35,6 +37,7 @@ class ViewProductTest extends TestCase
     public function stock_level_low()
     {
         $product = factory(Product::class)->create(['quantity' => 5]);
+        // dd($product->quantity);
         $response = $this->get('/shop/'.$product->slug);
         $response->assertSee('Low Stock');
     }

@@ -6,7 +6,7 @@ Route::get('/shop', 'ShopController@index')->name('shop.index');
 Route::get('/shop/{product}', 'ShopController@show')->name('shop.show');
 //Route::view('/cart', 'cart');
 Route::get('/cart', 'CartController@index')->name('cart.index');
-Route::post('/cart', 'CartController@store')->name('cart.store');
+Route::post('/cart/{product}', 'CartController@store')->name('cart.store');
 Route::patch('/cart/{product}', 'CartController@update')->name('cart.update');
 
 Route::delete('/cart/{product}', 'CartController@destroy')->name('cart.destroy');
@@ -41,6 +41,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/search', 'ShopController@search')->name('search');
 Route::get('/search-algolia', 'ShopController@searchAlgolia')->name('search-algolia');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/my-profile', 'UsersController@edit')->name('users.edit');
+    Route::patch('/my-profile', 'UsersController@update')->name('users.update');
+    Route::get('/my-orders', 'OrdersController@index')->name('orders.index');
+    Route::get('/my-orders/{order}', 'OrdersController@show')->name('orders.show');
+});
 
 
 Route::get('/mailable', function () {

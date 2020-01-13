@@ -17,9 +17,9 @@ class ShopController extends Controller
     {
         $pagination = 9;
         $categories = Category::all();
-
         if (request()->category) {
             $products = Category::where('slug', request()->category)->first()->products();
+          
             $categoryName = optional(Category::where('slug', request()->category)->first())->name;
 
             if (request()->sort == 'low_high') {
@@ -30,14 +30,19 @@ class ShopController extends Controller
             } else {
                 $products = $products->paginate($pagination);
             }
-
-            // $products = Product::with('categories')->whereHas('categories', function ($query) {
-            //     $query->where('slug', request()->category);
-            // })->get();
-            // $products = Category::where('slug', request()->category)->first()->products()->paginate($pagination);
         } else {
             $categoryName ="Featured";
-            $products = Product::where('featured', true)->paginate($pagination);
+            $products = Product::where('featured', true);
+            if (request()->sort == 'low_high') {
+                $products = $products->orderBy('price')->paginate($pagination);
+            } elseif (request()->sort == 'high_low') {
+                //dd(Category::where('slug', request()->category)->first()->products()->orderBy('price', 'desc'));
+                $products = $products->orderBy('price', 'desc')->paginate($pagination);
+            } else {
+                $products = $products->paginate($pagination);
+            }
+
+            //  $products = Product::where('featured', true)->paginate($pagination);
         }
 
         return view('shop')->with([
@@ -101,7 +106,7 @@ class ShopController extends Controller
         $product = Product::where('slug', $slug)->firstOrFail();
         $mightAlsoLike = Product::where('slug', '!=', $slug)->mightAlsoLike()->get();
         $stockLevel = getStockLevel($product->quantity);
-
+      
         return view('product')->with(
             [
                 'product' => $product,
