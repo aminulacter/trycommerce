@@ -1,7 +1,9 @@
 <?php
 namespace App\Console\Commands;
+
 use AlgoliaSearch\Client;
 use Illuminate\Console\Command;
+
 class ClearIndex extends Command
 {
     /**
